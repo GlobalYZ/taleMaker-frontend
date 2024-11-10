@@ -4,10 +4,10 @@ import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ThemedInput } from "@/components/ThemedInput";
 import { ThemedButton } from "@/components/ThemedButton";
-import { signup } from "@/api/auth";
+import { login } from "@/api/auth";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -18,10 +18,14 @@ export default function LoginScreen() {
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
 
   // Handle login submission
-  const handleSignUp = () => {
-    signup({ email, password }).then((response) => {
-      if (response) {
-        console.log("signup successful: ", response);
+  const handleLogin = () => {
+    // localStorage.setItem("loginState", "true");
+    login({ email, password }).then((token) => {
+      if (token) {
+        console.log("Login successful");
+        router.push("/");
+      } else {
+        console.log("Login failed");
       }
     });
   };
@@ -43,6 +47,7 @@ export default function LoginScreen() {
         backgroundColor: Colors[colorScheme ?? "light"].background,
       }}
     >
+      
       <a href="/login">
       <Image
         source={require("@/assets/images/logo-banner.png")}
@@ -58,13 +63,6 @@ export default function LoginScreen() {
       </a>
 
       <ThemedInput
-        title="Email"
-        type="email"
-        value={email}
-        onChangeText={setEmail}
-      />
-
-      <ThemedInput
         title="Password"
         type="password"
         value={password}
@@ -78,24 +76,15 @@ export default function LoginScreen() {
         onChangeText={setConfirmPassword}
         error={confirmPasswordError}
       />
-      
-      <View className="flex-col justify-center items-center">
+
+      <View className="flex-col justify-center items-center pt-5">
         <ThemedButton
-          title="SIGN UP"
-          onPress={handleSignUp}
-          className="bg-primary text-text-primary-strong w-40 h-10 rounded-full flex items-center justify-center mt-8"
+          title="RESET"
+          onPress={handleLogin}
+          className="bg-primary text-text-primary-strong w-40 h-10 rounded-full flex items-center justify-center"
           textClassName="font-bold text-lg"
         />
       </View>
-
-      <ThemedText className="text-sm my-4 text-secondary text-center">
-        Already have an account? {""}
-        <Link href="/login" className="text-primary">
-          Login
-        </Link>
-      </ThemedText>
-
-
     </ThemedView>
   );
 }

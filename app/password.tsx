@@ -11,22 +11,8 @@ import { login } from "@/api/auth";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const colorScheme = useColorScheme();
   const router = useRouter();
-
-  // Handle login submission
-  const handleLogin = () => {
-    // localStorage.setItem("loginState", "true");
-    login({ email, password }).then((token) => {
-      if (token) {
-        console.log("Login successful");
-        router.push("/");
-      } else {
-        console.log("Login failed");
-      }
-    });
-  };
 
   return (
     <ThemedView
@@ -50,6 +36,12 @@ export default function LoginScreen() {
       />
       </a>
 
+      <ThemedText
+        className = "text-center text-sm text-white pb-10"
+      >
+        Enter your email address below to reset your password
+      </ThemedText>
+
       <ThemedInput
         title="Email"
         type="email"
@@ -57,36 +49,15 @@ export default function LoginScreen() {
         onChangeText={setEmail}
       />
 
-      <ThemedInput
-        title="Password"
-        type="password"
-        value={password}
-        onChangeText={setPassword}
-      />
-
       <View className="flex-col justify-center items-center">
-        <a href="/password">
-        <ThemedText 
-        className="text-sm my-4 text-secondary">
-          Forgotten your password?
-        </ThemedText>
-        </a>
-
         <ThemedButton
-          title="LOG IN"
-          onPress={handleLogin}
+          title="SUBMIT"
+          onPress={() => {
+            router.push("/");
+          }}
           className="bg-primary text-text-primary-strong w-40 h-10 rounded-full flex items-center justify-center"
           textClassName="font-bold text-lg"
         />
-        <ThemedText className="text-sm my-4 text-secondary">
-          No account?
-          <Link
-            className="ml-2 text-sm text-primary font-semibold"
-            href="/signup"
-          >
-            Create One
-          </Link>
-        </ThemedText>
       </View>
     </ThemedView>
   );
