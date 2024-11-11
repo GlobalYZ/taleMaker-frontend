@@ -17,14 +17,15 @@ export default function LoginScreen() {
 
   // Handle login submission
   const handleLogin = () => {
-    // localStorage.setItem("loginState", "true");
     login({
       email: email,
       password: password,
     }).then((token) => {
       if (token) {
         console.log("Login successful");
-        router.push("/");
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
       } else {
         console.log("Login failed");
       }

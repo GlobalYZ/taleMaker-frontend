@@ -22,18 +22,20 @@ export default function TabLayout() {
       const authToken = await getItem("auth_token");
       const authTokenExpire = await getItem("auth_token_expire");
       const isAuthGroup = segments[0] === "(tabs)";
-
-      if (
-        !authToken ||
-        !authTokenExpire ||
-        new Date(authTokenExpire) < new Date() ||
-        isAuthGroup
-      ) {
-        removeItem("auth_token");
-        removeItem("auth_token_expire");
-        router.replace("/login");
+      if (isAuthGroup) {
+        if (
+          !authToken ||
+          !authTokenExpire ||
+          new Date(authTokenExpire) < new Date()
+        ) {
+          removeItem("auth_token");
+          removeItem("auth_token_expire");
+          router.replace("/login");
+        } else {
+          router.replace("/");
+        }
       } else {
-        router.replace("/");
+        router.replace("/login");
       }
     });
   }, [router]);
