@@ -18,7 +18,10 @@ export default function LoginScreen() {
   // Handle login submission
   const handleLogin = () => {
     // localStorage.setItem("loginState", "true");
-    login({ email, password }).then((token) => {
+    login({
+      email: email,
+      password: password,
+    }).then((token) => {
       if (token) {
         console.log("Login successful");
         router.push("/");
@@ -35,19 +38,18 @@ export default function LoginScreen() {
         backgroundColor: Colors[colorScheme ?? "light"].background,
       }}
     >
-      
       <a href="/login">
-      <Image
-        source={require("@/assets/images/logo-banner.png")}
-        alt="logo"
-        style={{
-          width: "105%",
-          marginBottom: -120,
-          marginTop: -250,
-        }}
-        resizeMethod="scale"
-        resizeMode="contain"
-      />
+        <Image
+          source={require("@/assets/images/logo-banner.png")}
+          alt="logo"
+          style={{
+            width: "105%",
+            marginBottom: -120,
+            marginTop: -250,
+          }}
+          resizeMethod="scale"
+          resizeMode="contain"
+        />
       </a>
 
       <ThemedInput
@@ -66,10 +68,9 @@ export default function LoginScreen() {
 
       <View className="flex-col justify-center items-center">
         <a href="/password">
-        <ThemedText 
-        className="text-sm my-4 text-secondary">
-          Forgotten your password?
-        </ThemedText>
+          <ThemedText className="text-sm my-4 text-secondary">
+            Forgotten your password?
+          </ThemedText>
         </a>
 
         <ThemedButton

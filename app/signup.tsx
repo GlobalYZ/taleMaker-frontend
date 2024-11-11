@@ -19,7 +19,11 @@ export default function LoginScreen() {
 
   // Handle login submission
   const handleSignUp = () => {
-    signup({ email, password }).then((response) => {
+    signup({
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+    }).then((response) => {
       if (response) {
         console.log("signup successful: ", response);
       }
@@ -44,17 +48,17 @@ export default function LoginScreen() {
       }}
     >
       <a href="/login">
-      <Image
-        source={require("@/assets/images/logo-banner.png")}
-        alt="logo"
-        style={{
-          width: "105%",
-          marginBottom: -120,
-          marginTop: -250,
-        }}
-        resizeMethod="scale"
-        resizeMode="contain"
-      />
+        <Image
+          source={require("@/assets/images/logo-banner.png")}
+          alt="logo"
+          style={{
+            width: "105%",
+            marginBottom: -120,
+            marginTop: -250,
+          }}
+          resizeMethod="scale"
+          resizeMode="contain"
+        />
       </a>
 
       <ThemedInput
@@ -78,7 +82,7 @@ export default function LoginScreen() {
         onChangeText={setConfirmPassword}
         error={confirmPasswordError}
       />
-      
+
       <View className="flex-col justify-center items-center">
         <ThemedButton
           title="SIGN UP"
@@ -94,8 +98,6 @@ export default function LoginScreen() {
           Login
         </Link>
       </ThemedText>
-
-
     </ThemedView>
   );
 }

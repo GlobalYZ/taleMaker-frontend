@@ -8,16 +8,29 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 // Import your global CSS file
 import "../../global.css";
+import { setItem, getItem, removeItem } from "../../scripts/store";
 
 import { useEffect } from "react";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const router = useRouter();
-
   useEffect(() => {
-    setTimeout(() => {
-      router.replace("/login");
+    setTimeout(async () => {
+      const authToken = await getItem("auth_token");
+      const authTokenExpire = await getItem("auth_token_expire");
+
+      if (
+        !authToken ||
+        !authTokenExpire ||
+        new Date(authTokenExpire) < new Date()
+      ) {
+        removeItem("auth_token");
+        removeItem("auth_token_expire");
+        router.replace("/login");
+      } else {
+        router.replace("/");
+      }
     });
   }, [router]);
 
