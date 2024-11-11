@@ -23,9 +23,8 @@ export default function LoginScreen() {
     }).then((token) => {
       if (token) {
         console.log("Login successful");
-        setTimeout(() => {
-          router.push("/");
-        }, 2000);
+
+        router.push("/");
       } else {
         console.log("Login failed");
       }

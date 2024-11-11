@@ -8,6 +8,7 @@ import { ThemedButton } from "@/components/ThemedButton";
 import { removeItem } from "@/scripts/store";
 import { useEffect, useRef } from "react";
 import { useRouter } from "expo-router";
+import Toast from "react-native-toast-message";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -15,6 +16,18 @@ export default function HomeScreen() {
 
   const isMounted = useRef(false); // To track if the component has mounted
   localStorage.setItem("loginState", "false");
+
+  const handleLogout = () => {
+    removeItem("auth_token");
+    removeItem("auth_token_expire");
+    Toast.show({
+      type: "success",
+      text1: "Successfully logged out!",
+    });
+    setTimeout(() => {
+      router.replace("/login");
+    }, 1000);
+  };
 
   return (
     <ParallaxScrollView

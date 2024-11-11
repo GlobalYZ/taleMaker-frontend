@@ -42,16 +42,14 @@ export const login = async (credentials: LoginRequestModel) => {
         await setItem('auth_token_expire', expireTime.toISOString());
         Toast.show({
           type: 'success',
-          text1: 'Success',
-          text2: 'Successfully logged in!'
+          text1: 'Successfully logged in!',
         });
         return accessToken;
     } else {
         console.log("response failed: ", response);
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: 'Login failed. Please try again.'
+          text1: 'Login failed. Please try again.',
         });
     }
     
@@ -75,16 +73,14 @@ export const signup = async (userData: SignupRequestModel) => {
         console.log("Signup successful");
         Toast.show({
           type: 'success',
-          text1: 'Success',
-          text2: 'Account created successfully!'
+          text1: 'Account created successfully!'
         });
         return data;
       } else {
         console.log("Signup failed: ", response);
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: 'Failed to create account. Please try again.'
+          text1: 'Failed to create account. Please try again.'
         });
         return null;
       }
@@ -92,8 +88,7 @@ export const signup = async (userData: SignupRequestModel) => {
       console.error('Signup failed:', error);
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: 'Failed to create account. Please check your information.'
+        text1: 'Failed to create account. Please check your information.',
       });
       return null;
     }
@@ -110,16 +105,14 @@ export const requestPasswordReset = async (resetData: PasswordResetRequestModel)
         await setItem('reset_password_token', token);
         Toast.show({
           type: 'success',
-          text1: 'Success',
-          text2: 'Password reset email has been sent!'
+          text1: 'Password reset email has been sent!',
         });
         return token;
     } else {
         console.log("response failed: ", response);
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: 'Failed to send reset email. Please try again.'
+          text1: 'Failed to send reset email. Please try again.',
         });
     }
     
@@ -127,8 +120,7 @@ export const requestPasswordReset = async (resetData: PasswordResetRequestModel)
     console.error('Password reset request failed:', error);
     Toast.show({
       type: 'error',
-      text1: 'Error',
-      text2: 'Failed to send reset email. Please check your email address.'
+      text1: 'Failed to send reset email. Please check your email address.',
     });
     return null;
   }
@@ -149,16 +141,14 @@ export const resetPassword = async (resetData: ResetPasswordRequestModel) => {
         console.log('Password reset successful');
         Toast.show({
           type: 'success',
-          text1: 'Success',
-          text2: 'Password has been reset successfully!'
+          text1: 'Password has been reset successfully!'
         });
         return response.data;
     } else {
         console.log("response failed: ", response);
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: 'Failed to reset password. Please try again.'
+          text1: 'Failed to reset password. Please try again.'
         });
         return null;
     }
@@ -166,7 +156,6 @@ export const resetPassword = async (resetData: ResetPasswordRequestModel) => {
     console.error('Password reset failed:', error);
     Toast.show({
       type: 'error',
-      text1: 'Error',
       text2: 'Failed to reset password. Please try again later.'
     });
     return null;
