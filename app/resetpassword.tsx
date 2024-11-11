@@ -1,4 +1,4 @@
-import { Image, View } from "react-native";
+import { Image, View, Alert } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { ThemedInput } from "@/components/ThemedInput";
 import { ThemedButton } from "@/components/ThemedButton";
 import { login } from "@/api/auth";
+import { resetPassword } from "@/api/auth";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -18,16 +19,11 @@ export default function LoginScreen() {
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
 
   // Handle login submission
-  const handleLogin = () => {
-    // localStorage.setItem("loginState", "true");
-    login({ email, password }).then((token) => {
-      if (token) {
-        console.log("Login successful");
-        router.push("/");
-      } else {
-        console.log("Login failed");
-      }
-    });
+  const handleResetPassword = async () => {
+    const response = await resetPassword({ token: "", newPassword: password });
+    if (response) {
+      router.push("/login");
+    }
   };
 
   useEffect(() => {
@@ -47,19 +43,18 @@ export default function LoginScreen() {
         backgroundColor: Colors[colorScheme ?? "light"].background,
       }}
     >
-      
       <a href="/login">
-      <Image
-        source={require("@/assets/images/logo-banner.png")}
-        alt="logo"
-        style={{
-          width: "105%",
-          marginBottom: -120,
-          marginTop: -250,
-        }}
-        resizeMethod="scale"
-        resizeMode="contain"
-      />
+        <Image
+          source={require("@/assets/images/logo-banner.png")}
+          alt="logo"
+          style={{
+            width: "105%",
+            marginBottom: -120,
+            marginTop: -250,
+          }}
+          resizeMethod="scale"
+          resizeMode="contain"
+        />
       </a>
 
       <ThemedInput
@@ -80,7 +75,7 @@ export default function LoginScreen() {
       <View className="flex-col justify-center items-center pt-5">
         <ThemedButton
           title="RESET"
-          onPress={handleLogin}
+          onPress={handleResetPassword}
           className="bg-primary text-text-primary-strong w-40 h-10 rounded-full flex items-center justify-center"
           textClassName="font-bold text-lg"
         />

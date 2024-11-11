@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { Text } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useSegments } from "expo-router";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
@@ -14,16 +14,20 @@ import { useEffect } from "react";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const segments = useSegments();
+
   const router = useRouter();
   useEffect(() => {
     setTimeout(async () => {
       const authToken = await getItem("auth_token");
       const authTokenExpire = await getItem("auth_token_expire");
+      const isAuthGroup = segments[0] === "(tabs)";
 
       if (
         !authToken ||
         !authTokenExpire ||
-        new Date(authTokenExpire) < new Date()
+        new Date(authTokenExpire) < new Date() ||
+        isAuthGroup
       ) {
         removeItem("auth_token");
         removeItem("auth_token_expire");

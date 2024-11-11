@@ -47,19 +47,17 @@ export default function LoginScreen() {
         backgroundColor: Colors[colorScheme ?? "light"].background,
       }}
     >
-      <a href="/login">
-        <Image
-          source={require("@/assets/images/logo-banner.png")}
-          alt="logo"
-          style={{
-            width: "105%",
-            marginBottom: -120,
-            marginTop: -250,
-          }}
-          resizeMethod="scale"
-          resizeMode="contain"
-        />
-      </a>
+      <Image
+        source={require("@/assets/images/logo-banner.png")}
+        alt="logo"
+        style={{
+          width: "105%",
+          marginBottom: -120,
+          marginTop: -250,
+        }}
+        resizeMethod="scale"
+        resizeMode="contain"
+      />
 
       <ThemedInput
         title="Email"

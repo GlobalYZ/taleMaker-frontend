@@ -4,29 +4,17 @@ import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-
+import { ThemedButton } from "@/components/ThemedButton";
+import { removeItem } from "@/scripts/store";
 import { useEffect, useRef } from "react";
 import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
   const router = useRouter();
+  // how to setup Route gate keeper
+
   const isMounted = useRef(false); // To track if the component has mounted
   localStorage.setItem("loginState", "false");
-
-  // useEffect(() => {
-  //   // This ensures we wait until the component is mounted
-  //   isMounted.current = true;
-
-  //   // Only navigate after the component has mounted
-  //   if (isMounted.current) {
-  //     router.replace("/login");
-  //   }
-
-  //   // Cleanup the isMounted flag when component unmounts
-  //   return () => {
-  //     isMounted.current = false;
-  //   };
-  // }, [router]);
 
   return (
     <ParallaxScrollView
@@ -40,37 +28,16 @@ export default function HomeScreen() {
     >
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: "cmd + d", android: "cmd + m" })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
+        <ThemedButton
+          title="LOG OUT"
+          className="bg-primary text-text-primary-strong w-40 h-10 rounded-full flex items-center justify-center"
+          textClassName="font-bold"
+          onPress={() => {
+            removeItem("auth_token");
+            removeItem("auth_token_expire");
+            router.replace("/login");
+          }}
+        />
       </ThemedView>
     </ParallaxScrollView>
   );

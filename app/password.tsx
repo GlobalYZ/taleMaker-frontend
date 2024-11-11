@@ -7,12 +7,19 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { useState } from "react";
 import { ThemedInput } from "@/components/ThemedInput";
 import { ThemedButton } from "@/components/ThemedButton";
-import { login } from "@/api/auth";
+import { requestPasswordReset } from "@/api/auth";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const colorScheme = useColorScheme();
   const router = useRouter();
+
+  const handleSubmit = async () => {
+    const response = await requestPasswordReset({ email: email });
+    if (response) {
+      router.push("/login");
+    }
+  };
 
   return (
     <ThemedView
@@ -21,24 +28,21 @@ export default function LoginScreen() {
         backgroundColor: Colors[colorScheme ?? "light"].background,
       }}
     >
-      
       <a href="/login">
-      <Image
-        source={require("@/assets/images/logo-banner.png")}
-        alt="logo"
-        style={{
-          width: "105%",
-          marginBottom: -120,
-          marginTop: -250,
-        }}
-        resizeMethod="scale"
-        resizeMode="contain"
-      />
+        <Image
+          source={require("@/assets/images/logo-banner.png")}
+          alt="logo"
+          style={{
+            width: "105%",
+            marginBottom: -120,
+            marginTop: -250,
+          }}
+          resizeMethod="scale"
+          resizeMode="contain"
+        />
       </a>
 
-      <ThemedText
-        className = "text-center text-sm text-white pb-10"
-      >
+      <ThemedText className="text-center text-sm text-white pb-10">
         Enter your email address below to reset your password
       </ThemedText>
 
@@ -52,9 +56,7 @@ export default function LoginScreen() {
       <View className="flex-col justify-center items-center">
         <ThemedButton
           title="SUBMIT"
-          onPress={() => {
-            router.push("/");
-          }}
+          onPress={handleSubmit}
           className="bg-primary text-text-primary-strong w-40 h-10 rounded-full flex items-center justify-center"
           textClassName="font-bold text-lg"
         />

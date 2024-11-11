@@ -13,6 +13,11 @@ interface LoginResponseModel {
   expiresIn: number;
 }
 
+interface PasswordResetRequestModel
+{
+    email: string;
+}
+
 interface SignupRequestModel {
   email: string;
   password: string;
@@ -66,32 +71,21 @@ export const signup = async (userData: SignupRequestModel) => {
     }
   };
 
-export const requestPasswordReset = async (email: string) => {
+export const requestPasswordReset = async (resetData: PasswordResetRequestModel) => {
   try {
-    //check auth token expiration
-    const authToken = await getItem('auth_token');
-    const authTokenExpire = await getItem('auth_token_expire');
-    if (authToken && authTokenExpire && new Date(authTokenExpire) > new Date()) {
-        //add auth token to the request header
-        const headers = {
-            'Authorization': `Bearer ${authToken}`
-        };
-        //send request with auth token
-        const response = await axios.post(
-            API_URL + '/api/account/forgotpassword', 
-            { email }, 
-            { headers }
-        );
+    const response = await axios.post(API_URL + '/api/account/forgotpassword', resetData);
+    console.log(response);
+
+
         if (response.status === 200) {
             console.log('Password reset email sent');
+            const token = response.data.token;
+            await setItem('reset_password_token', token);
+            return token
         } else {
             console.log("response failed: ", response);
         }
-    } else {
-        console.log("auth token expired");
-        removeItem('auth_token');
-        removeItem('auth_token_expire');
-    }
+
     
   } catch (error) {
     console.error('Password reset request failed:', error);
@@ -100,11 +94,8 @@ export const requestPasswordReset = async (email: string) => {
 
 export const resetPassword = async (resetData: ResetPasswordRequestModel) => {
   try {
-    //check auth token expiration
-    const authToken = await getItem('auth_token');
-    const authTokenExpire = await getItem('auth_token_expire');
-    if (authToken && authTokenExpire && new Date(authTokenExpire) > new Date()) {
-        //add auth token to the request header
+    const authToken = await getItem('reset_password_token'); //place token from request password reset here
+    //add auth token to the request header
         const headers = {
             'Authorization': `Bearer ${authToken}`
         };
@@ -114,17 +105,16 @@ export const resetPassword = async (resetData: ResetPasswordRequestModel) => {
             resetData, 
             { headers }
         );
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 201) {
             console.log('Password reset successful');
+            return response.data;
         } else {
             console.log("response failed: ", response);
+            return null;
         }
-    } else {
-        console.log("auth token expired");
-        removeItem('auth_token');
-        removeItem('auth_token_expire');
+    } catch (error) {
+        console.error('Password reset failed:', error);
+        return null;
     }
-  } catch (error) {
-    console.error('Password reset failed:', error);
-  }
+
 };
