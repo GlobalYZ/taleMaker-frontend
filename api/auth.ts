@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setItem, getItem, removeItem } from '../scripts/store';
+import { setCookie, getCookie, deleteCookie } from '../scripts/store';
 import { API_URL } from '../constants/api';
 import Toast from 'react-native-toast-message';
 
@@ -35,11 +35,13 @@ export const login = async (credentials: LoginRequestModel) => {
     const response = await axios.post<LoginResponseModel>(API_URL + 'api/account/Login', credentials);
     if (response.status === 201 || response.status === 200) {
         console.log(response.data);
-        const { accessToken } = response.data;
-        const expireTime = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+        const { accessToken, expiresIn, email } = response.data;
 
-        await setItem('auth_token', response.data.accessToken);
-        await setItem('auth_token_expire', expireTime.toISOString());
+        await setCookie('auth_token', accessToken, {
+          expires: new Date(new Date().getTime() + expiresIn * 1000),
+          path: '/'
+        });
+        
         Toast.show({
           type: 'success',
           text1: 'Successfully logged in!',
@@ -102,7 +104,13 @@ export const requestPasswordReset = async (resetData: PasswordResetRequestModel)
     if (response.status === 200) {
         console.log('Password reset email sent');
         const token = response.data.token;
-        await setItem('reset_password_token', token);
+        
+        await setCookie('reset_password_token', token, {
+          expires: new Date(new Date().getTime() + 3600 * 1000),
+          path: '/',
+          secure: window.location.protocol === 'https:'
+        });
+        
         Toast.show({
           type: 'success',
           text1: 'Password reset email has been sent!',
@@ -128,7 +136,15 @@ export const requestPasswordReset = async (resetData: PasswordResetRequestModel)
 
 export const resetPassword = async (resetData: ResetPasswordRequestModel) => {
   try {
-    const authToken = await getItem('reset_password_token');
+    const authToken = await getCookie('reset_password_token');
+    if (!authToken) {
+      Toast.show({
+        type: 'error',
+        text1: 'Reset token expired or invalid',
+      });
+      return null;
+    }
+
     const headers = {
         'Authorization': `Bearer ${authToken}`
     };
@@ -139,6 +155,7 @@ export const resetPassword = async (resetData: ResetPasswordRequestModel) => {
     );
     if (response.status === 200 || response.status === 201) {
         console.log('Password reset successful');
+        await deleteCookie('reset_password_token');
         Toast.show({
           type: 'success',
           text1: 'Password has been reset successfully!'
@@ -159,5 +176,33 @@ export const resetPassword = async (resetData: ResetPasswordRequestModel) => {
       text2: 'Failed to reset password. Please try again later.'
     });
     return null;
+  }
+};
+
+export const checkAuthStatus = async () => {
+  const token = await getCookie('auth_token');
+  return !!token;
+};
+
+export const getAuthToken = async () => {
+  return await getCookie('auth_token');
+};
+
+export const logout = async () => {
+  try {
+    await deleteCookie('auth_token');
+    await deleteCookie('user_email');
+    Toast.show({
+      type: 'success',
+      text1: 'Successfully logged out!'
+    });
+    return true;
+  } catch (error) {
+    console.error('Logout failed:', error);
+    Toast.show({
+      type: 'error',
+      text1: 'Logout failed'
+    });
+    return false;
   }
 };

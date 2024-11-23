@@ -8,23 +8,28 @@ import { useState } from "react";
 import { ThemedInput } from "@/components/ThemedInput";
 import { ThemedButton } from "@/components/ThemedButton";
 import { login } from "@/api/auth";
+import Loading from "@/components/navigation/loading";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const colorScheme = useColorScheme();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   // Handle login submission
   const handleLogin = () => {
+    setIsLoading(true);
     login({
       email: email,
       password: password,
     }).then((token) => {
+      setIsLoading(false);
       if (token) {
         console.log("Login successful");
-
-        router.push("/");
+        setTimeout(() => {
+          router.push("/");
+        });
       } else {
         console.log("Login failed");
       }
@@ -38,6 +43,7 @@ export default function LoginScreen() {
         backgroundColor: Colors[colorScheme ?? "light"].background,
       }}
     >
+      {isLoading && <Loading />}
       <Image
         source={require("@/assets/images/logo-banner.png")}
         alt="logo"

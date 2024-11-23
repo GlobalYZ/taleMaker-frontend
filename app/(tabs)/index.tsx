@@ -9,6 +9,7 @@ import { removeItem } from "@/scripts/store";
 import { useEffect, useRef } from "react";
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
+import { logout } from "@/api/auth";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -18,15 +19,8 @@ export default function HomeScreen() {
   localStorage.setItem("loginState", "false");
 
   const handleLogout = () => {
-    removeItem("auth_token");
-    removeItem("auth_token_expire");
-    Toast.show({
-      type: "success",
-      text1: "Successfully logged out!",
-    });
-    setTimeout(() => {
-      router.replace("/login");
-    }, 1000);
+    logout();
+    router.replace("/login");
   };
 
   return (
@@ -45,11 +39,7 @@ export default function HomeScreen() {
           title="LOG OUT"
           className="bg-primary text-text-primary-strong w-40 h-10 rounded-full flex items-center justify-center"
           textClassName="font-bold"
-          onPress={() => {
-            removeItem("auth_token");
-            removeItem("auth_token_expire");
-            router.replace("/login");
-          }}
+          onPress={handleLogout}
         />
       </ThemedView>
     </ParallaxScrollView>

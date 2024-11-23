@@ -17,7 +17,7 @@ export default function LoginScreen() {
   const handleSubmit = async () => {
     const response = await requestPasswordReset({ email: email });
     if (response) {
-      router.push("/login");
+      // router.push("/login");
     }
   };
 
@@ -28,19 +28,17 @@ export default function LoginScreen() {
         backgroundColor: Colors[colorScheme ?? "light"].background,
       }}
     >
-      <a href="/login">
-        <Image
-          source={require("@/assets/images/logo-banner.png")}
-          alt="logo"
-          style={{
-            width: "105%",
-            marginBottom: -120,
-            marginTop: -250,
-          }}
-          resizeMethod="scale"
-          resizeMode="contain"
-        />
-      </a>
+      <Image
+        source={require("@/assets/images/logo-banner.png")}
+        alt="logo"
+        style={{
+          width: "105%",
+          marginBottom: -120,
+          marginTop: -250,
+        }}
+        resizeMethod="scale"
+        resizeMode="contain"
+      />
 
       <ThemedText className="text-center text-sm text-white pb-10">
         Enter your email address below to reset your password

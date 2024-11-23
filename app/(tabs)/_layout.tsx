@@ -2,43 +2,50 @@ import { Tabs } from "expo-router";
 import React from "react";
 import { Text } from "react-native";
 import { useRouter, useSegments } from "expo-router";
-
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-// Import your global CSS file
 import "../../global.css";
-import { setItem, getItem, removeItem } from "../../scripts/store";
-
+import { getCookie, deleteCookie } from "../../scripts/store";
 import { useEffect } from "react";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const segments = useSegments();
-
   const router = useRouter();
+
   useEffect(() => {
-    setTimeout(async () => {
-      const authToken = await getItem("auth_token");
-      const authTokenExpire = await getItem("auth_token_expire");
-      const isAuthGroup = segments[0] === "(tabs)";
-      if (isAuthGroup) {
-        if (
-          !authToken ||
-          !authTokenExpire ||
-          new Date(authTokenExpire) < new Date()
-        ) {
-          removeItem("auth_token");
-          removeItem("auth_token_expire");
-          router.replace("/login");
+    const checkAuth = async () => {
+      try {
+        const authToken = await getCookie("auth_token");
+        const isAuthGroup = segments[0] === "(tabs)";
+        if (isAuthGroup) {
+          if (!authToken) {
+            await deleteCookie("auth_token");
+            router.replace("/login");
+          } else {
+            if (authToken) {
+              router.replace("/");
+            } else {
+              await deleteCookie("auth_token");
+              await deleteCookie("user_email");
+              router.replace("/login");
+            }
+          }
         } else {
-          router.replace("/");
+          router.replace("/login");
         }
-      } else {
+      } catch (error) {
+        console.error("Auth check failed:", error);
         router.replace("/login");
       }
-    });
-  }, [router]);
+    };
+
+    // run checkAuth
+    setTimeout(() => {
+      checkAuth();
+    }, 0);
+  }, [router, segments]);
 
   return (
     <Tabs
