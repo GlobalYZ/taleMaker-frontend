@@ -1,11 +1,9 @@
 import { Image, StyleSheet, Platform, View } from "react-native";
 
-import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
+import CreateForm from "@/components/modals/CreateForm";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import { ThemedButton } from "@/components/ThemedButton";
-import { removeItem } from "@/scripts/store";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "expo-router";
 import { logout } from "@/api/auth";
@@ -40,7 +38,7 @@ export default function HomeScreen() {
         />
       }
     >
-      {showPopup && <View />}
+      <CreateForm onClose={() => setShowPopup(false)} visible={showPopup} />
 
       <ThemedButton
         title="GENERATE A NEW STORY"
@@ -52,7 +50,7 @@ export default function HomeScreen() {
 
       <ThemedButton
         title="LASTEST STORY"
-        textClassName="font-bold"
+        textClassName="font-bold text-lg"
         className="bg-bg-secondary flex-row justify-center items-center gap-5 rounded-2xl py-7 mb-20"
         onPress={handleLastestStory}
         awesomeIcon={<FontAwesomeIcon icon={faBook} size={32} />}
