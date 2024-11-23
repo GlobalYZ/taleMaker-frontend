@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform } from "react-native";
+import { Image, StyleSheet, Platform, View } from "react-native";
 
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
@@ -8,8 +8,9 @@ import { ThemedButton } from "@/components/ThemedButton";
 import { removeItem } from "@/scripts/store";
 import { useEffect, useRef } from "react";
 import { useRouter } from "expo-router";
-import Toast from "react-native-toast-message";
 import { logout } from "@/api/auth";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faPenNib, faBook } from "@fortawesome/free-solid-svg-icons";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -28,39 +29,33 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
       headerImage={
         <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
+          source={require("@/assets/images/logo-banner.png")}
+          className="w-full h-full"
         />
       }
     >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <ThemedButton
-          title="LOG OUT"
-          className="bg-primary text-text-primary-strong w-40 h-10 rounded-full flex items-center justify-center"
-          textClassName="font-bold"
-          onPress={handleLogout}
-        />
+      <ThemedView
+        customBgColor
+        className="flex flex-col items-center justify-center bg-bg-secondary rounded-2xl text-text-primary-strong gap-5 py-12 mt-12 mb-10"
+      >
+        <FontAwesomeIcon icon={faPenNib} size={52} />
+        <ThemedText>GENERATE A NEW STORY</ThemedText>
       </ThemedView>
+
+      <ThemedView
+        customBgColor
+        className="bg-bg-secondary flex-row justify-center items-center gap-5 rounded-2xl py-7 mb-20"
+      >
+        <FontAwesomeIcon icon={faBook} size={36} />
+        <ThemedText>LASTEST STORY</ThemedText>
+      </ThemedView>
+      <ThemedButton
+        title="LOG OUT"
+        className="bg-primary text-text-primary-strong w-32 h-10 rounded-full flex items-center justify-center absolute right-0 bottom-0"
+        textClassName="font-bold"
+        onPress={handleLogout}
+      />
+      {/* // </ThemedView> */}
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
-  },
-});
