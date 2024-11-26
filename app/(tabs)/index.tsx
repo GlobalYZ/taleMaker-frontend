@@ -2,9 +2,8 @@ import { Image, StyleSheet, Platform, View } from "react-native";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import CreateForm from "@/components/modals/CreateForm";
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedButton } from "@/components/ThemedButton";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "expo-router";
 import { logout } from "@/api/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -33,7 +32,7 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
       headerImage={
         <Image
-          source={require("@/assets/images/logo-banner.png")}
+          source={require("@/assets/images/logo-banner2.png")}
           className="w-full h-full"
         />
       }

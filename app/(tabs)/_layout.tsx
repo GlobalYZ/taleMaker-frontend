@@ -19,21 +19,13 @@ export default function TabLayout() {
       try {
         const authToken = await getCookie("auth_token");
         const isAuthGroup = segments[0] === "(tabs)";
-        if (isAuthGroup) {
-          if (!authToken) {
-            await deleteCookie("auth_token");
-            router.replace("/login");
-          } else {
-            if (authToken) {
-              router.replace("/");
-            } else {
-              await deleteCookie("auth_token");
-              await deleteCookie("user_email");
-              router.replace("/login");
-            }
-          }
-        } else {
+
+        if (!authToken) {
+          await deleteCookie("auth_token");
+          await deleteCookie("user_email");
           router.replace("/login");
+        } else if (!isAuthGroup) {
+          router.replace("/");
         }
       } catch (error) {
         console.error("Auth check failed:", error);
@@ -76,6 +68,28 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "home" : "home-outline"}
+              className={focused ? "text-primary font-bold" : "text-secondary"}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="collections"
+        options={{
+          title: "Collections",
+          tabBarLabel: ({ focused }) => (
+            <Text
+              className={`${
+                focused ? "text-primary" : "text-secondary"
+              } text-xs mb-3`}
+            >
+              Collections
+            </Text>
+          ),
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              name={focused ? "book" : "book-outline"}
               className={focused ? "text-primary font-bold" : "text-secondary"}
             />
           ),
