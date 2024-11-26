@@ -4,20 +4,13 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import CreateForm from "@/components/modals/CreateForm";
 import { ThemedButton } from "@/components/ThemedButton";
 import { useState } from "react";
-import { useRouter } from "expo-router";
 import { logout } from "@/api/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faPenNib, faBook } from "@fortawesome/free-solid-svg-icons";
 
 export default function HomeScreen() {
-  const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
   // how to setup Route gate keeper
-
-  const handleLogout = () => {
-    logout();
-    router.replace("/login");
-  };
 
   const handleLastestStory = () => {
     console.log("Lastest story");
@@ -53,12 +46,6 @@ export default function HomeScreen() {
         className="bg-bg-secondary flex-row justify-center items-center gap-5 rounded-2xl py-7 mb-20"
         onPress={handleLastestStory}
         awesomeIcon={<FontAwesomeIcon icon={faBook} size={32} />}
-      />
-      <ThemedButton
-        title="LOG OUT"
-        className="bg-primary text-text-primary-strong w-32 h-10 rounded-full flex items-center justify-center absolute right-0 bottom-0"
-        textClassName="font-bold"
-        onPress={handleLogout}
       />
       {/* // </ThemedView> */}
     </ParallaxScrollView>

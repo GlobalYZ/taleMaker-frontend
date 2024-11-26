@@ -53,6 +53,28 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
+        name="collections"
+        options={{
+          title: "Collections",
+          tabBarLabel: ({ focused }) => (
+            <Text
+              className={`${
+                focused ? "text-primary" : "text-secondary"
+              } text-xs mb-3`}
+            >
+              Collections
+            </Text>
+          ),
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              name={focused ? "book" : "book-outline"}
+              className={focused ? "text-primary font-bold" : "text-secondary"}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name="index"
         options={{
           title: "Home",
@@ -75,21 +97,21 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="collections"
+        name="profile"
         options={{
-          title: "Collections",
+          title: "Profile",
           tabBarLabel: ({ focused }) => (
             <Text
               className={`${
                 focused ? "text-primary" : "text-secondary"
               } text-xs mb-3`}
             >
-              Collections
+              Profile
             </Text>
           ),
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "book" : "book-outline"}
+              name={focused ? "person-circle" : "person-circle-outline"}
               className={focused ? "text-primary font-bold" : "text-secondary"}
             />
           ),
