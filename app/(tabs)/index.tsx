@@ -1,16 +1,40 @@
 import { Image, StyleSheet, Platform, View } from "react-native";
+import { useState, useEffect } from "react";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import CreateForm from "@/components/modals/CreateForm";
 import { ThemedButton } from "@/components/ThemedButton";
-import { useState } from "react";
-import { logout } from "@/api/auth";
+import { ThemedText } from "@/components/ThemedText";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faPenNib, faBook } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { API_URL } from "@/constants/api";
+import { getAuthToken } from "@/api/auth";
 
 export default function HomeScreen() {
   const [showPopup, setShowPopup] = useState(false);
-  // how to setup Route gate keeper
+  const [apiCount, setApiCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchApiCount = async () => {
+      try {
+        const token = await getAuthToken();
+        const response = await axios.get(
+          API_URL + "/api/talemaker/apicallcount",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setApiCount(response.data.apiCallCount);
+      } catch (error) {
+        console.error("Failed to get API call count:", error);
+      }
+    };
+
+    fetchApiCount();
+  }, []);
 
   const handleLastestStory = () => {
     console.log("Lastest story");
@@ -30,6 +54,12 @@ export default function HomeScreen() {
         />
       }
     >
+      {apiCount !== null && (
+        <ThemedText className="text-center mt-4 text-white">
+          API Calls: {apiCount}
+        </ThemedText>
+      )}
+
       <CreateForm onClose={() => setShowPopup(false)} visible={showPopup} />
 
       <ThemedButton
@@ -47,7 +77,6 @@ export default function HomeScreen() {
         onPress={handleLastestStory}
         awesomeIcon={<FontAwesomeIcon icon={faBook} size={32} />}
       />
-      {/* // </ThemedView> */}
     </ParallaxScrollView>
   );
 }
